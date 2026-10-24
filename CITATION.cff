@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it."
+title: "QAOA best-of-K sampling under gate noise"
+authors:
+  - family-names: Degala
+    given-names: Chenchupradeep
+version: 0.1.0
+date-released: 2026-10-24
+license: MIT
+repository-code: "https://github.com/pradeepdegalaroyal/qaoa-best-of-k-sampling-noise"
