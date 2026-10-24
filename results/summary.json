@@ -1,0 +1,69 @@
+{
+ "n_main": 8,
+ "seeds": [
+  0,
+  1,
+  2,
+  3,
+  4
+ ],
+ "crossover_eps2_per_seed": {
+  "p1_K5": {
+   "0": Infinity,
+   "1": Infinity,
+   "2": Infinity,
+   "3": Infinity,
+   "4": Infinity
+  },
+  "p1_K10": {
+   "0": Infinity,
+   "1": Infinity,
+   "2": Infinity,
+   "3": Infinity,
+   "4": Infinity
+  },
+  "p1_K30": {
+   "0": Infinity,
+   "1": Infinity,
+   "2": Infinity,
+   "3": Infinity,
+   "4": Infinity
+  },
+  "p1_K100": {
+   "0": Infinity,
+   "1": Infinity,
+   "2": Infinity,
+   "3": Infinity,
+   "4": Infinity
+  },
+  "p2_K5": {
+   "0": Infinity,
+   "1": Infinity,
+   "2": Infinity,
+   "3": Infinity,
+   "4": Infinity
+  },
+  "p2_K10": {
+   "0": Infinity,
+   "1": Infinity,
+   "2": Infinity,
+   "3": Infinity,
+   "4": Infinity
+  },
+  "p2_K30": {
+   "0": Infinity,
+   "1": Infinity,
+   "2": Infinity,
+   "3": Infinity,
+   "4": Infinity
+  },
+  "p2_K100": {
+   "0": Infinity,
+   "1": Infinity,
+   "2": Infinity,
+   "3": Infinity,
+   "4": Infinity
+  }
+ },
+ "runtime_s": 119.9
+}
