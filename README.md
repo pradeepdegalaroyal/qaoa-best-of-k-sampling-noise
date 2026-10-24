@@ -74,4 +74,18 @@ Full run: 120 s on Windows 11, Python 3.11.9, 16-thread CPU (numpy only, no GPU)
 - [modular-chip-aware-qaoa-placement](https://github.com/pradeepdegalaroyal/modular-chip-aware-qaoa-placement)
 
 ## Citation
-See `CITATION.cff`. MIT license (`LICENSE`).
+
+If you use this code, please cite it (see also `CITATION.cff`):
+
+```bibtex
+@software{chenchupradeep2026qaoabestofks,
+  author  = {Chenchupradeep, Degala},
+  title   = {QAOA best-of-K sampling under gate noise},
+  year    = {2026},
+  version = {0.1.0},
+  url     = {https://github.com/pradeepdegalaroyal/qaoa-best-of-k-sampling-noise},
+  license = {MIT}
+}
+```
+
+MIT license (`LICENSE`).
