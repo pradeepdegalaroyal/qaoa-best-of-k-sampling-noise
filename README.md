@@ -1,4 +1,4 @@
-# QAOA best-of-K sampling under gate noise
+# Quantum Approximate Optimization Algorithm (QAOA) best-of-K sampling under gate noise
 
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 ![Python 3.11](https://img.shields.io/badge/python-3.11-blue)
@@ -11,20 +11,21 @@ Reviews of QAOA stress error susceptibility and noise resilience (Blekos et al.,
 
 ## Method
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#ffffff', 'primaryTextColor': '#000000', 'primaryBorderColor': '#000000', 'lineColor': '#000000', 'secondaryColor': '#ffffff', 'tertiaryColor': '#ffffff', 'background': '#ffffff', 'noteBkgColor': '#ffffff', 'noteTextColor': '#000000', 'actorBkg': '#ffffff', 'actorBorder': '#000000', 'actorTextColor': '#000000', 'signalColor': '#000000', 'signalTextColor': '#000000', 'labelBoxBkgColor': '#ffffff', 'labelTextColor': '#000000', 'clusterBkg': '#ffffff', 'clusterBorder': '#000000'}}}%%
 flowchart LR
-  G[3-regular MaxCut graph] --> T[Train QAOA params, ideal statevector]
-  T --> N[Density-matrix run with depolarising noise eps2]
-  N --> D[Exact output distribution]
-  D --> B["E[best cut in K samples] / max cut"]
-  R[Uniform random, K samples] --> B
-  H[Hill climbing, K cut evaluations] --> B
+  G["3-regular MaxCut graph"] --> T["Train QAOA params, ideal statevector"]
+  T --> N["Density-matrix run with depolarising noise eps2"]
+  N --> D["Exact output distribution"]
+  D --> B["E["best cut in K samples"] / max cut"]
+  R["Uniform random, K samples"] --> B
+  H["Hill climbing, K cut evaluations"] --> B
 ```
-Parameters are trained without noise and deployed with noise (eps2 after each RZZ, eps2/10 after each RX). Because the output distribution is exact, best-of-K is computed in closed form, so the curves contain no shot noise; only variation across graphs is shown. 5 graphs for the main sweep (n = 8), 3 for scaling.
+Parameters are trained without noise and deployed with noise (eps2 after each two-qubit ZZ (two-qubit Pauli-Z product) rotation (RZZ), eps2/10 after each single-qubit X rotation (RX)). Because the output distribution is exact, best-of-K is computed in closed form, so the curves contain no shot noise; only variation across graphs is shown. 5 graphs for the main sweep (n = 8), 3 for scaling.
 
 ## Results
 Numbers below are from `results/summary_qaoa.csv`, `summary_baselines.csv`, `summary_success.csv`, `scaling.csv`.
 
-E[best cut]/max cut, n = 8, mean over 5 graphs (std across graphs in the CSVs; K=5 std ≤ 0.01 at eps2 ≤ 0.1):
+E[best cut]/max cut, n = 8, mean over 5 graphs (std across graphs in the comma-separated value (CSV) files; K=5 std ≤ 0.01 at eps2 ≤ 0.1):
 
 | Method | K=5 | K=10 | K=30 | K=100 |
 |---|---|---|---|---|
@@ -48,14 +49,14 @@ Scaling (K=30, `scaling.csv`, 3 graphs): at n=10 random 0.874, hill climbing 0.9
 ## Discussion
 - **H1 supported in simulation:** QAOA best-of-K stays above random sampling for all tested eps2, including 0.4 for p=1 (K=5: 0.806 vs 0.792, i.e. almost at the floor). The margin shrinks quickly: at eps2=0.4 it is ~0.01 in ratio.
 - **H2 weakly supported:** the mean cut favours p=1 already at eps2=0.1, while best-of-K needs eps2 of about 0.1-0.2 before the p=1/p=2 order flips. Differences near the crossing are below 0.003 in ratio, so the exact location is only resolved to the grid {0.05, 0.1, 0.2}.
-- **Classical comparison is not one-sided:** with equal evaluation budgets a trivial hill climber is as good as QAOA at K=100 and beats it at K≥30 only when QAOA is heavily noisy; at small K QAOA is ahead. But the sample counts are not equivalent costs (a QPU shot vs a classical cut evaluation), and n ≤ 10 is brute-forceable, so this is no evidence of quantum advantage.
+- **Classical comparison is not one-sided:** with equal evaluation budgets a trivial hill climber is as good as QAOA at K=100 and beats it at K≥30 only when QAOA is heavily noisy; at small K QAOA is ahead. But the sample counts are not equivalent costs (a quantum processing unit (QPU) shot vs a classical cut evaluation), and n ≤ 10 is brute-forceable, so this is no evidence of quantum advantage.
 - Negative/neutral: K=100 saturates at n=8 (256 bitstrings), so large K is uninformative at this size.
 
 ## Limitations
 Depolarising noise only (no readout error, crosstalk, coherent errors); no transpilation or connectivity constraints; the cost layer is applied as one block before the per-edge channels; parameters are not re-trained under noise; no error mitigation; tiny instances; graph seeds 0-2 give identical n=8 cut statistics (std 0.000 in scaling), so scaling error bars understate variability.
 
 ## Future work
-Run on hardware with transpiled circuits, add readout error and mitigation (e.g. ZNE, as in related work below), noise-aware retraining, CVaR objectives, larger n with tensor-network or circuit-cutting simulation, and a comparison against stronger classical solvers (MILP, Goemans-Williamson) at matched wall-clock.
+Run on hardware with transpiled circuits, add readout error and mitigation (e.g. Zero-noise extrapolation (ZNE), as in related work below), noise-aware retraining, conditional value at risk (CVaR) objectives, larger n with tensor-network or circuit-cutting simulation, and a comparison against stronger classical solvers (mixed-integer linear programming (MILP), Goemans-Williamson) at matched wall-clock.
 
 ## Reproducibility
 ```
@@ -64,7 +65,7 @@ python -m pytest -q
 python experiments/run_all.py --quick   # ~10 s
 python experiments/run_all.py           # ~2 min
 ```
-Full run: 120 s on Windows 11, Python 3.11.9, 16-thread CPU (numpy only, no GPU). Library versions used: numpy 2.2.6, scipy 1.17.1, pandas 2.3.3, matplotlib 3.11.1, networkx 3.6.1.
+Full run: 120 s on Windows 11, Python 3.11.9, 16-thread central processing unit (CPU) (numpy only, no graphics processing unit (GPU)). Library versions used: numpy 2.2.6, scipy 1.17.1, pandas 2.3.3, matplotlib 3.11.1, networkx 3.6.1.
 
 ## Structure
 `src/qaoa_bok/` (qaoa.py: simulators, best-of-K, hill climbing; study.py: sweeps), `experiments/run_all.py`, `tests/`, `docs/`, `results/`, `figures/`.
@@ -88,4 +89,4 @@ If you use this code, please cite it (see also `CITATION.cff`):
 }
 ```
 
-MIT license (`LICENSE`).
+Massachusetts Institute of Technology (MIT) license (`LICENSE`).
